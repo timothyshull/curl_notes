@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="github-markdown.css">
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            min-width: 200px;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 45px;
+        }
+
+        @media (max-width: 767px) {
+            .markdown-body {
+                padding: 15px;
+            }
+        }
+
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            .page-break {
+                page-break-after: always;
+            }
+        }
+
+        h1 {
+            -weasy-string-set: chapter "Current major section: " content()
+        }
+
+        h2 {
+            -weasy-string-set: chapter "Current minor section: " content()
+        }
+
+        h3 {
+            -weasy-string-set: chapter "Current subsection: " content()
+        }
+
+        h4 {
+            -weasy-string-set: chapter "Current subsection level 2: " content()
+        }
+    </style>
+</head>
+<body>
+{{ article }}
+</body>
+</html>
