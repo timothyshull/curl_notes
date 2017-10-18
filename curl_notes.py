@@ -118,6 +118,7 @@ def write_pdf(
         stylesheets.append(config.landscape_style)
 
     HTML(string=markup).write_pdf(output_file, stylesheets=stylesheets)
+    print('Wrote file: {0}'.format(output_file))
 
 
 def main():
@@ -129,14 +130,16 @@ def main():
     )
     parser.add_argument(
         '--all',
-        type=bool,
         default=False,
+        action='store_true',
         help='update all PDFs (default is to only update PDFs with '
              'corresponding modified .md files'
     )
     args = vars(parser.parse_args())
+
     notes_files = get_notes_files(config.notes_dir, args['all']) + \
         getattr(config, 'force_update', [])
+
     for note_file in notes_files:
         markdown = curl_markup_for_file(note_file, getattr(config, 'git_url'))
         title = convert_title(note_file)
