@@ -4,6 +4,7 @@ import argparse
 import configparser
 import glob
 import os
+import pathlib
 import re
 import requests
 import subprocess
@@ -76,7 +77,8 @@ def get_modified_md_files(notes_dir):
 
 def get_all_md_files(notes_dir):
     notes_glob = notes_dir + '/**/*.md'
-    return glob.iglob(notes_glob, recursive=True)
+    return [str(pathlib.PurePath(filename).relative_to(notes_dir)) for
+            filename in glob.iglob(notes_glob, recursive=True)]
 
 
 # TODO: can add filters to config also
