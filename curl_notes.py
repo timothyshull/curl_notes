@@ -33,6 +33,15 @@ class Configuration:
         self.css_file = os.path.join(self.working_dir, self.css_file)
         self.pdf_style = CSS(filename=self.css_file)
         self.landscape_style = CSS(string=self.landscape_style)
+        self._attribute_to_list('landscape_files')
+        self._attribute_to_list('force_update')
+
+    def _attribute_to_list(self, attr):
+        setattr(
+            self,
+            attr,
+            [elem for elem in getattr(self, attr, '').split(',') if elem]
+        )
 
 
 def convert_title(filename):
@@ -70,6 +79,7 @@ def get_all_md_files(notes_dir):
     return glob.iglob(notes_glob, recursive=True)
 
 
+# TODO: can add filters to config also
 def get_notes_files(notes_dir, update_all=False, filters=('README', 'TODOS')):
     if update_all:
         md_files = get_all_md_files(notes_dir)
@@ -125,7 +135,9 @@ def main():
              'corresponding modified .md files'
     )
     args = vars(parser.parse_args())
-    for note_file in get_notes_files(config.notes_dir, args['all']):
+    notes_files = get_notes_files(config.notes_dir, args['all']) + \
+        getattr(config, 'force_update', [])
+    for note_file in notes_files:
         markdown = curl_markup_for_file(note_file, getattr(config, 'git_url'))
         title = convert_title(note_file)
         full_markdown = generate_markup_from_template(
