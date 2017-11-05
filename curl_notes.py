@@ -65,9 +65,10 @@ def get_modified_md_files(notes_dir):
         cwd=notes_dir
     ).strip())
     all_modified_glob = subprocess.check_output(
-        ['git', 'diff', '--name-only', last_modified, 'HEAD~'],
+        ['git', 'diff', '--name-only', last_modified, 'HEAD'],
         cwd=notes_dir
     )
+
     all_modified = [to_str(filename)
                     for filename in all_modified_glob.splitlines()]
 
@@ -143,6 +144,7 @@ def main():
         getattr(config, 'force_update', [])
 
     for note_file in notes_files:
+        print('Updating PDF for: {}'.format(note_file))
         markdown = curl_markup_for_file(note_file, getattr(config, 'git_url'))
         title = convert_title(note_file)
         full_markdown = generate_markup_from_template(
